@@ -28,11 +28,11 @@
     "text": "Visualization 1: [Sexual Health Education and Risk of Unintended Pregnancy]\nDescribe what this plot shows, and why it’s important.\n\n\nCode\n# your code here\nlibrary(ggplot2)\nlibrary(viridis)\nlibrary(dplyr)\n\nclean_fogzone &lt;- readRDS(\"data/clean_fogzone.rds\")\n\n\nclean_fogzone_factors &lt;- clean_fogzone %&gt;%\n  mutate(\n    abstonly = factor(\n      abstonly,\n      levels = c(\"No sex ed/ don't know\", \"Abstinence Only\", \"Abstinence Focused\", \"Contraceptive Focused\")\n    ),\n    riskr = factor(riskr, levels = c(\"No\", \"Yes\"))\n  )\n\nggplot(clean_fogzone_factors, aes(x = abstonly, fill = riskr)) +\n  geom_bar(position = position_dodge(width = 0.9)) +\n  geom_text(stat = \"count\", aes(label = ..count..), \n            position = position_dodge(width = 0.9), \n            vjust = -0.4, size = 3.5) +\n  scale_fill_viridis_d(\n    name = \"At Risk?\",\n    labels = c(\"No\", \"Yes\"),\n    option = \"D\"\n  ) +\nlabs(\n  title = \"Sexual Health Education and Risk of Unintended Pregnancy\",\n  x = \"Type of Sexual Health Education Recived\",\n  y = \"Number of Participants\"\n  ) + \ntheme_minimal(base_size = 14) +\ntheme(\n  axis.text.x = element_text(angle = 20, hjust = 1, face = \"bold\", size = 10),\n  axis.text.y = element_text(face = \"bold\"),\n  plot.title = element_text(face = \"bold\"),\n  legend.position = \"top\"\n)"
   },
   {
-    "objectID": "index.html#visualization-2-title-here",
-    "href": "index.html#visualization-2-title-here",
+    "objectID": "index.html#visualization-2-pregnancy-risk-perception-by-age-group",
+    "href": "index.html#visualization-2-pregnancy-risk-perception-by-age-group",
     "title": "Final Project: [Sexual Education, Contraceptive Use, & Pregnancy Risk]",
-    "section": "Visualization 2: [Title Here]",
-    "text": "Visualization 2: [Title Here]\nDescribe what this plot shows, and why it’s important.\n\n\nCode\n# your code here"
+    "section": "Visualization 2: [Pregnancy Risk Perception by Age Group]",
+    "text": "Visualization 2: [Pregnancy Risk Perception by Age Group]\nThis plot shows whether perception of pregnancy risk changes with age.\n\n\nCode\nlibrary(tidyverse)\n\ndf &lt;- read_csv(\"clean_fogzone.csv\")\n\nbar_data &lt;- df %&gt;%\n  filter(!is.na(Age), !is.na(riskr)) %&gt;%\n  count(Age, riskr) %&gt;%\n  group_by(Age) %&gt;%\n  mutate(pct = n / sum(n) * 100)\n\nggplot(bar_data, aes(x = riskr, y = pct, fill = riskr)) +\n  geom_col(width = 0.4) +\n  facet_wrap(~ Age, nrow=1) +\n  labs(\n    title = \"Perceived Pregnancy Risk by Age Group\",\n    x = \"Perceived Risk\",\n    y = \"Percentage of Respondents\",\n    fill = \"Response\"\n  ) +\n  scale_y_continuous(labels = scales::percent_format(scale = 1)) +\n  theme_classic()"
   },
   {
     "objectID": "index.html#visualization-3-does-sex-education-type-affect-the-type-of-contraception-used",

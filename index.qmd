@@ -213,12 +213,33 @@ theme(
 )
 ```
 
-## Visualization 2: [Title Here]
+## Visualization 2: [Pregnancy Risk Perception by Age Group]
 
-_Describe what this plot shows, and why it's important._
+This plot shows whether perception of pregnancy risk changes with age. 
 
 ```{r}
-# your code here
+library(tidyverse)
+
+df <- read_csv("clean_fogzone.csv")
+
+bar_data <- df %>%
+  filter(!is.na(Age), !is.na(riskr)) %>%
+  count(Age, riskr) %>%
+  group_by(Age) %>%
+  mutate(pct = n / sum(n) * 100)
+
+ggplot(bar_data, aes(x = riskr, y = pct, fill = riskr)) +
+  geom_col(width = 0.4) +
+  facet_wrap(~ Age, nrow=1) +
+  labs(
+    title = "Perceived Pregnancy Risk by Age Group",
+    x = "Perceived Risk",
+    y = "Percentage of Respondents",
+    fill = "Response"
+  ) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1)) +
+  theme_classic()
+
 ```
 
 ## Visualization 3: [Does sex education type affect the type of contraception used?]
