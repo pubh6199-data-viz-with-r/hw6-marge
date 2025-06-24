@@ -1,5 +1,5 @@
 ---
-title: "Final Project: [YOUR TITLE HERE]"
+title: "Final Project: [Sexual Education, Contraceptive Use, & Pregnancy Risk]"
 author: "Belen Zemas & Amel Attalla"
 date: "2025-06-26"
 params:
