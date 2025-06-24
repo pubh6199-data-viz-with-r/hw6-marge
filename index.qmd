@@ -37,11 +37,11 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-In this project we aim to examine the relationship between the types of sexual health education that are taught in the United States, contraceptive knowledge and risk of unplanned pregnancies. As the definition of what constitutes appropriate and effective sexual education continues to be an increasingly debated topic, we aim to shed light on how different approaches-such as abstinence-only vs. contraceptive focused curricula-may correlate with public health outcomes. For this project we have decided to create visualizations that focus on these three questions: 
+In this project we aim to examine the relationship between the types of sexual health education that are taught in the United States, contraceptive use and risk of unplanned pregnancies. As the definition of what constitutes appropriate and effective sexual education continues to be an increasingly debated topic, we aim to shed light on how different approaches-such as abstinence-only vs. contraceptive focused curricula-may correlate with public health outcomes. For this project we have decided to create visualizations that focus on these three questions: 
 
 1. How does sex education type influence perceptions of pregnancy risk?
-2. Does receiving abstinence-only vs. comprehensive sex education affect contraceptive knowledge scores?
-3. Is there an association between sex education type and contraceptive method currently used?
+2. What is the pregnancy Risk Perception by Age Group?
+3. Does sex education type affect the type of contraception used?
 
 
 ## Data
