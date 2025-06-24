@@ -226,12 +226,73 @@ _Describe what this plot shows, and why it's important._
 # your code here
 ```
 
-## Visualization 3: [Title Here]
+## Visualization 3: [Does sex education type affect the type of contraception used?]
 
-_Describe what this plot shows, and why it's important._
+This question examines whether the type of sex education individuals received influences their current contraceptive behavior. Using the variable abstonly, we categorize respondents by whether they received abstinence-focused education, comprehensive sex education, or no sex education. We then analyze their reported contraceptive method. The goal is to identify whether sex education is associated with the use of more effective or consistent contraceptive methods, offering insight into how educational content may shape real-life health decisions.
 
 ```{r}
-# your code here
+library(tidyverse)
+library(ggalluvial)
+
+d <- read_csv("clean_fogzone.csv")
+
+sankey_data <- d %>%
+  select(abstonly, Current_most_effective_method) %>%
+  filter(
+    !is.na(abstonly),
+    !is.na(Current_most_effective_method),
+    !str_detect(str_to_lower(Current_most_effective_method), "no sex|refused|don't know")
+  ) %>%
+  count(abstonly, Current_most_effective_method) %>%
+  rename(sex_ed = abstonly, method = Current_most_effective_method) %>%
+  mutate(
+    sex_ed = case_when(
+      sex_ed == "Abstinence Focused" ~ "Abstinence-Focused",
+      sex_ed == "Abstinence Only" ~ "Abstinence Only",
+      sex_ed == "Contraceptive Focused" ~ "Comprehensive",
+      sex_ed == "No sex ed/ don't know" ~ "No/Don't Know",
+      TRUE ~ sex_ed
+    ),
+    method = case_when(
+      method == "hormonal + condoms" ~ "Hormonal + Condoms",
+      method == "hormonal alone" ~ "Hormonal Alone",
+      method == "long-acting alone" ~ "LARC Alone",
+      method == "long-acting + condom" ~ "LARC + Condom",
+      method == "no method - likely at risk" ~ "No Method (Likely Risk)",
+      method == "no method - risk unknown" ~ "No Method (Unknown Risk)",
+      method == "other/unknown" ~ "Other/Unknown",
+      method == "withdrawal/NFP" ~ "Withdrawal / NFP",
+      TRUE ~ method
+    )
+  )
+
+p <- ggplot(sankey_data,
+            aes(axis1 = sex_ed, axis2 = method, y = n)) +
+  geom_alluvium(aes(fill = sex_ed), width = 1/15) +
+  geom_stratum(width = 1/15, fill = "orange", color = "black") +
+  scale_x_discrete(
+    limits = c("Sex Education Type", "Contraceptive Method"),
+    expand = c(.05, .05)
+  ) +
+  labs(
+    title = "Sex Ed Type → Current Contraceptive Method",
+    y = "Number of People",
+    fill = "Sex Education"
+  ) +
+  theme_classic()
+
+
+strata_data <- ggplot_build(p)$data[[2]]
+
+p +
+  geom_text(data = strata_data %>% filter(x == 1),
+            aes(x = x - 0.05, y = y, label = stratum),
+            hjust = 1, size = 3, inherit.aes = FALSE) +
+  geom_text(data = strata_data %>% filter(x == 2),
+            aes(x = x + 0.05, y = y, label = stratum),
+            hjust = 0, size = 3, inherit.aes = FALSE)
+
+
 ```
 
 ## OR Shiny app: [Title Here]
