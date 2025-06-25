@@ -211,9 +211,9 @@ ggplot(percent_data, aes(x = abstonly, y = pct, fill = riskr)) +
     size = 3.5
   ) +
   scale_fill_viridis_d(
+    option="D",
     name = "At Risk?",
-    labels = c("No", "Yes"),
-    option = "D"
+    labels = c("No", "Yes")
   ) +
   labs(
     title = "Sexual Health Education and Risk of Unintended Pregnancy",
@@ -235,7 +235,7 @@ ggplot(percent_data, aes(x = abstonly, y = pct, fill = riskr)) +
 
 ## Visualization 2: Contraceptive Methods by Type of Sexual Education (Faceted Bar Chart)
 
-More comprehensive sex ed (Contraceptive Focused) is associated with greater use of effective methods like condoms or hormonal contraception.No Method and No Sex (Last 12 Mo) appear across all education types, but tend to be more frequent in less comprehensive or absent education categories.
+This plot displays the contraceptive methods used by participants grouped by their type of sex ed. More comprehensive sex ed (Contraceptive Focused) is associated with greater use of effective methods like condoms or hormonal contraception.No Method and No Sex (Last 12 Mo) appear across all education types, but tend to be more frequent in less comprehensive or absent education categories.
 
 ```{r}
 # Step 1: Clean and relabel variables
@@ -306,7 +306,9 @@ ggplot(contraceptive_summary, aes(x = method_grouped, y = pct, fill = method_gro
 
 ```
 
-## Visualization 3: [Does sex education type affect the type of contraception used?]
+## Visualization 3: Flow of Sex Ed → Risk Perception → Contraceptive Method
+
+This diagram shows the flow of participants through the type of sex ed they receive, whether they perceive pregnancy risk, and their chosen contraceptive method. Contraceptive-Focused more frequently flows into more effective methods such as condom use, hormonal, or both combined, where abstinence-only flows more into no method. 
 
 
 
