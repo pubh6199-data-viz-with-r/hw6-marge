@@ -37,11 +37,13 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-In this project we aim to examine the relationship between the types of sexual health education that are taught in the United States, contraceptive knowledge and risk of unplanned pregnancies. As the definition of what constitutes appropriate and effective sexual education continues to be an increasingly debated topic, we aim to shed light on how different approaches-such as abstinence-only vs. contraceptive focused curricula-may correlate with public health outcomes. For this project we have decided to create visualizations that focus on these three questions: 
+In this project we aim to examine the relationship between the types of sexual health education that are taught in the United States, contraceptive knowledge and risk of unplanned pregnancies, as well as how that knowledge is applied to real life. What constitutes appropriate and effective sexual education continues to be an increasingly debated topic, we aim to shed light on how different approaches-such as abstinence-only vs. contraceptive focused curricula may correlate with public health outcomes. For this project we have decided to create visualizations that focus on these three questions: 
 
-1. How does sex education type influence perceptions of pregnancy risk?
-2. Does receiving abstinence-only vs. comprehensive sex education affect contraceptive knowledge scores?
-3. Is there an association between sex education type and contraceptive method currently used?
+1.⁠ ⁠How does sex education type influence perceptions of pregnancy risk?
+
+2.⁠ ⁠How does sex education type influence the method of contraceptive used?
+
+3.⁠ ⁠How do sexual education type, perceived pregnancy risk, and contraceptive method interrelate in shaping reproductive decision-making?
 
 
 ## Data
@@ -194,28 +196,41 @@ clean_fogzone_factors <- clean_fogzone %>%
     riskr = factor(riskr, levels = c("No", "Yes"))
   )
 
-ggplot(clean_fogzone_factors, aes(x = abstonly, fill = riskr)) +
-  geom_bar(position = position_dodge(width = 0.9)) +
-  geom_text(stat = "count", aes(label = ..count..), 
-            position = position_dodge(width = 0.9), 
-            vjust = -0.4, size = 3.5) +
+percent_data <- clean_fogzone_factors %>%
+  group_by(abstonly, riskr) %>%
+  summarise(n=n(), .groups="drop") %>%
+  group_by(abstonly) %>%
+  mutate(pct = n / sum(n) * 100)
+
+ggplot(percent_data, aes(x = abstonly, y = pct, fill = riskr)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +
+  geom_text(
+    aes(label = paste0(round(pct, 1), "%")),
+    position = position_dodge(width = 0.9),
+    vjust = -0.4,
+    size = 3.5
+  ) +
   scale_fill_viridis_d(
     name = "At Risk?",
     labels = c("No", "Yes"),
     option = "D"
   ) +
-labs(
-  title = "Sexual Health Education and Risk of Unintended Pregnancy",
-  x = "Type of Sexual Health Education Recived",
-  y = "Number of Participants"
-  ) + 
-theme_minimal(base_size = 14) +
-theme(
-  axis.text.x = element_text(angle = 20, hjust = 1, face = "bold", size = 10),
-  axis.text.y = element_text(face = "bold"),
-  plot.title = element_text(face = "bold"),
-  legend.position = "top"
-)
+  labs(
+    title = "Sexual Health Education and Risk of Unintended Pregnancy",
+    x = "Type of Sexual Health Education Recived",
+    y = "Percentage of Participants"
+  ) +
+  ylim(0,100) + 
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.margin = margin(50, 30, 30, 30),  # Adjust all margins (top, right, bottom, left)
+    axis.text.x = element_text(angle = 20, hjust = 1, face = "bold", size = 10),
+    axis.text.y = element_text(face = "bold"),
+    plot.title = element_text(face = "bold"),
+    legend.position = "top"
+  )
+
+
 ```
 
 ## Visualization 2: [Pregnancy Risk Perception by Age Group]
@@ -223,97 +238,127 @@ theme(
 This plot shows whether perception of pregnancy risk changes with age. 
 
 ```{r}
-library(tidyverse)
+# Step 1: Clean and relabel variables
+contraceptive_data <- clean_fogzone_factors %>%
+  filter(!is.na(Current_most_effective_method)) %>%
+  mutate(
+    method_grouped = case_when(
+      Current_most_effective_method %in% c("no method - likely at risk", "no method - risk unknown") ~ "No method",
+      Current_most_effective_method %in% c("withdrawl/NFP", "other/unknown") ~ "Other/Unknown/Withdrawal",
+      TRUE ~ Current_most_effective_method
+    ),
+    # Capitalize for better display
+    method_grouped = recode(method_grouped,
+      "condoms" = "Condoms",
+      "hormonal + condoms" = "Hormonal + Condoms",
+      "hormonal alone" = "Hormonal",
+      "long-acting + condom" = "LARC + Condoms",
+      "long-acting alone" = "LARC",
+      "No method" = "No Method",
+      "no sex ever/ last 12 mo" = "No Sex (Last 12 Mo)",
+      "Other/Unknown/Withdrawal" = "Other/Unknown/Withdrawal"
+    ),
+    method_grouped = factor(method_grouped),
+    
+    # Add line breaks in abstonly for better facet titles
+    abstonly = recode(abstonly,
+      "No sex ed/ don't know" = "No Sex Ed/\nDon't know",
+      "Abstinence Only" = "Abstinence\nOnly",
+      "Abstinence Focused" = "Abstinence\nFocused",
+      "Contraceptive Focused" = "Contraceptive\nFocused"
+    )
+  )
 
-df <- read_csv("clean_fogzone.csv")
-
-bar_data <- df %>%
-  filter(!is.na(Age), !is.na(riskr)) %>%
-  count(Age, riskr) %>%
-  group_by(Age) %>%
+# Step 2: Create percentage summary
+contraceptive_summary <- contraceptive_data %>%
+  group_by(abstonly, method_grouped) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  group_by(abstonly) %>%
   mutate(pct = n / sum(n) * 100)
 
-ggplot(bar_data, aes(x = riskr, y = pct, fill = riskr)) +
-  geom_col(width = 0.4) +
-  facet_wrap(~ Age, nrow=1) +
-  labs(
-    title = "Perceived Pregnancy Risk by Age Group",
-    x = "Perceived Risk",
-    y = "Percentage of Respondents",
-    fill = "Response"
+# Step 3: Plot with vertical bars and improved facet layout
+ggplot(contraceptive_summary, aes(x = method_grouped, y = pct, fill = method_grouped)) +
+  geom_bar(stat = "identity") +
+  scale_fill_viridis_d(
+    name = "Contraceptive Method",
+    option = "C"
   ) +
-  scale_y_continuous(labels = scales::percent_format(scale = 1)) +
-  theme_classic()
+  labs(
+    title = "Contraceptive Methods by Type of Sexual Education",
+    x = "Contraceptive Method",
+    y = "Percentage of Participants"
+  ) +
+  ylim(0, 40) +
+  facet_wrap(~abstonly, nrow = 1, scales = "free_x") +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.margin = margin(t = 60, r = 30, b = 30, l = 30),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.text.y = element_text(face = "bold"),
+    plot.title = element_text(face = "bold", hjust = 0.5, size = 12),
+    strip.text = element_text(face = "bold", size = 8),
+    legend.position = "right",
+    legend.title = element_text(face = "bold", size = 8),
+    legend.text = element_text(size = 8)
+  )
+
 
 ```
 
 ## Visualization 3: [Does sex education type affect the type of contraception used?]
 
-This question examines whether the type of sex education individuals received influences their current contraceptive behavior. Using the variable abstonly, we categorize respondents by whether they received abstinence-focused education, comprehensive sex education, or no sex education. We then analyze their reported contraceptive method. The goal is to identify whether sex education is associated with the use of more effective or consistent contraceptive methods, offering insight into how educational content may shape real-life health decisions.
+
 
 ```{r}
 library(tidyverse)
 library(ggalluvial)
 
-d <- read_csv("clean_fogzone.csv")
+library(ggplot2)
+library(ggalluvial)
+library(dplyr)
 
-sankey_data <- d %>%
-  select(abstonly, Current_most_effective_method) %>%
-  filter(
-    !is.na(abstonly),
-    !is.na(Current_most_effective_method),
-    !str_detect(str_to_lower(Current_most_effective_method), "no sex|refused|don't know")
-  ) %>%
-  count(abstonly, Current_most_effective_method) %>%
-  rename(sex_ed = abstonly, method = Current_most_effective_method) %>%
-  mutate(
-    sex_ed = case_when(
-      sex_ed == "Abstinence Focused" ~ "Abstinence-Focused",
-      sex_ed == "Abstinence Only" ~ "Abstinence Only",
-      sex_ed == "Contraceptive Focused" ~ "Comprehensive",
-      sex_ed == "No sex ed/ don't know" ~ "No/Don't Know",
-      TRUE ~ sex_ed
-    ),
-    method = case_when(
-      method == "hormonal + condoms" ~ "Hormonal + Condoms",
-      method == "hormonal alone" ~ "Hormonal Alone",
-      method == "long-acting alone" ~ "LARC Alone",
-      method == "long-acting + condom" ~ "LARC + Condom",
-      method == "no method - likely at risk" ~ "No Method (Likely Risk)",
-      method == "no method - risk unknown" ~ "No Method (Unknown Risk)",
-      method == "other/unknown" ~ "Other/Unknown",
-      method == "withdrawal/NFP" ~ "Withdrawal / NFP",
-      TRUE ~ method
-    )
-  )
+# Step 1: Prepare data with cleaned labels from Q2
+sankey_data <- contraceptive_data %>%
+  filter(!is.na(riskr), !is.na(abstonly), !is.na(method_grouped)) %>%
+  count(abstonly, riskr, method_grouped)  # Count participants for each unique flow
 
-p <- ggplot(sankey_data,
-            aes(axis1 = sex_ed, axis2 = method, y = n)) +
-  geom_alluvium(aes(fill = sex_ed), width = 1/15) +
-  geom_stratum(width = 1/15, fill = "orange", color = "black") +
-  scale_x_discrete(
-    limits = c("Sex Education Type", "Contraceptive Method"),
-    expand = c(.05, .05)
+# Step 2: Plot Sankey / Alluvial Diagram
+ggplot(sankey_data,
+       aes(axis1 = abstonly, axis2 = riskr, axis3 = method_grouped,
+           y = n)) +
+  geom_alluvium(aes(fill = method_grouped), width = 0.3, alpha=0.8) +
+  geom_stratum(
+    width = 0.1,
+    fill = "gray90",
+    color = "black") +
+  geom_text(
+    stat = "stratum",
+    aes(label = after_stat(stratum)),
+    size = 3, 
+    check_overlap =TRUE, 
+    na.rm = TRUE,
+    label_axis3 = NULL
   ) +
+  scale_x_discrete(limits = c("Sex Ed Type", "Perceived Risk", "Contraceptive Method"),
+                   expand = c(0.05, 0.05)) +
+  scale_fill_viridis_d(option = "C", name = "Contraceptive Method") +
   labs(
-    title = "Sex Ed Type → Current Contraceptive Method",
-    y = "Number of People",
-    fill = "Sex Education"
+    title = "Flow from Sexual Education to Risk Perception to Contraceptive Behavior",
+    y = "Number of Participants"
   ) +
-  theme_classic()
-
-
-strata_data <- ggplot_build(p)$data[[2]]
-
-p +
-  geom_text(data = strata_data %>% filter(x == 1),
-            aes(x = x - 0.05, y = y, label = stratum),
-            hjust = 1, size = 3, inherit.aes = FALSE) +
-  geom_text(data = strata_data %>% filter(x == 2),
-            aes(x = x + 0.05, y = y, label = stratum),
-            hjust = 0, size = 3, inherit.aes = FALSE)
-
-
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    axis.text.y = element_blank(),
+    axis.ticks = element_blank(),
+    legend.title = element_text(size = 8, face = "bold"),
+    legend.text = element_text(size = 7),
+    legend.key.size = unit(0.4, "cm"),  
+    legend.spacing.y = unit(0.2, "cm"), 
+    legend.position = "right",
+    plot.margin = margin(t = 20, r = 30, b = 20, l = 30)
+  )
 ```
 
 ## OR Shiny app: [Title Here]
