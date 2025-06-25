@@ -174,9 +174,9 @@ clean_fogzone <- raw_data %>%
   )
 ```   
 
-## Visualization 1: [Sexual Health Education and Risk of Unintended Pregnancy]
+## Visualization 1: Sexual Health Education and Risk of Unintended Pregnancy (Stacked Bar Chart)
 
-_Describe what this plot shows, and why it's important._
+This plot displays the percentage of participants who perceive themselves to be at risk of unintended pregnancy, grouped by the type of sexual education they received. Across all sex ed types, the majority of participants report being at risk.Those who received no sex ed or don’t know report lower risk perception than those with abstinence-based education, suggesting that the type of education may shape perceived vulnerability. Something interesting to note is that abstinence-only group had the highest risk at 77.3%.
 
 ```{r}
 # your code here
@@ -233,9 +233,9 @@ ggplot(percent_data, aes(x = abstonly, y = pct, fill = riskr)) +
 
 ```
 
-## Visualization 2: [Pregnancy Risk Perception by Age Group]
+## Visualization 2: Contraceptive Methods by Type of Sexual Education (Faceted Bar Chart)
 
-This plot shows whether perception of pregnancy risk changes with age. 
+More comprehensive sex ed (Contraceptive Focused) is associated with greater use of effective methods like condoms or hormonal contraception.No Method and No Sex (Last 12 Mo) appear across all education types, but tend to be more frequent in less comprehensive or absent education categories.
 
 ```{r}
 # Step 1: Clean and relabel variables
@@ -312,18 +312,14 @@ ggplot(contraceptive_summary, aes(x = method_grouped, y = pct, fill = method_gro
 
 ```{r}
 library(tidyverse)
-library(ggalluvial)
-
 library(ggplot2)
 library(ggalluvial)
 library(dplyr)
 
-# Step 1: Prepare data with cleaned labels from Q2
 sankey_data <- contraceptive_data %>%
   filter(!is.na(riskr), !is.na(abstonly), !is.na(method_grouped)) %>%
-  count(abstonly, riskr, method_grouped)  # Count participants for each unique flow
+  count(abstonly, riskr, method_grouped)  
 
-# Step 2: Plot Sankey / Alluvial Diagram
 ggplot(sankey_data,
        aes(axis1 = abstonly, axis2 = riskr, axis3 = method_grouped,
            y = n)) +
