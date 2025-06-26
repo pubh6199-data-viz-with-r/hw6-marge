@@ -1,6 +1,6 @@
 ---
 title: "Final Project: [Sexual Education, Contraceptive Use, & Pregnancy Risk]"
-author: "Belen Zemas & Amel Attalla"
+author: "Amel Attalla & Belen Zemas"
 date: "2025-06-26"
 params:
   number: 6
@@ -174,7 +174,7 @@ clean_fogzone <- raw_data %>%
   )
 ```   
 
-## Visualization 1: Sexual Health Education and Risk of Unintended Pregnancy (Stacked Bar Chart)
+## Visualization 1: Sexual Health Education and Risk of Unintended Pregnancy (Grouped Bar Chart)
 
 This plot displays the percentage of participants who perceive themselves to be at risk of unintended pregnancy, grouped by the type of sexual education they received. Across all sex ed types, the majority of participants report being at risk.Those who received no sex ed or don’t know report lower risk perception than those with abstinence-based education, suggesting that the type of education may shape perceived vulnerability. Something interesting to note is that abstinence-only group had the highest risk at 77.3%.
 
@@ -371,7 +371,9 @@ _Summarize your key findings. What do your visualizations reveal?_
 
 ## Limitations
 
-_Discuss any data quality or design limitations._
+This data is subject to several limitations. First, all observations rely on self-reported information about sexual health knowledge and behaviors, which introduces the potential for recall bias and social desirability bias. Participants may have overestimated their safe sex practices or underreported riskier behaviors. Second, while the dataset includes many helpful variables, it lacks information about where participants received their sexual health education. Knowing the state or region could enable geographic visualizations or an interactive Shiny app to explore the effects of state-specific curricula—an insight that could support policy arguments for more comprehensive sex education in public schools. Finally, the data was collected in 2009 and may not reflect more recent policy changes, cultural shifts, or behavioral trends among young people.
+
+
 
 ## Conclusion
 
@@ -379,9 +381,16 @@ _Wrap up your project with a takeaway message or next steps._
 
 ## References
 
-_Include any references to data sources, packages, or literature you used. If your visualization design is inspired by someone else's work, cite those too._
+1. Reference 1: Raw Data file 
+Frost, Jennifer J. 2009 National Survey of Reproductive and Contraceptive Knowledge: Guttmacher 2009 Survey of contraceptive knowledge  Fog Zone .dta. Ann Arbor, MI: Inter-university Consortium for Political and Social Research [distributor], 2022-03-31. https://doi.org/10.3886/E164142V1-146384
+https://www.openicpsr.org/openicpsr/project/164142/version/V1/view?path=/openicpsr/164142/fcr:versions/V1/Guttmacher-2009-Survey-of-contraceptive-knowledge--Fog-Zone-.dta&type=file
 
-1. Reference 1
-2. Reference 2
-3. Reference 3
+2. Reference 2: Codebook for raw data 
+Frost, Jennifer J. 2009 National Survey of Reproductive and Contraceptive Knowledge: Guttmacher 2009 Survey of contraceptive knowledge  Fog Zone  user guide and codebook.pdf. Ann Arbor, MI: Inter-university Consortium for Political and Social Research [distributor], 2022-03-31. https://doi.org/10.3886/E164142V1-131024
+https://www.openicpsr.org/openicpsr/project/164142/version/V1/view?path=/openicpsr/164142/fcr:versions/V1/Guttmacher-2009-Survey-of-contraceptive-knowledge--Fog-Zone--user-guide-and-codebook.pdf&type=file#
+
+3. Reference 3: ICPSR project link
+Frost, Jennifer J. 2009 National Survey of Reproductive and Contraceptive Knowledge. Ann Arbor, MI: Inter-university Consortium for Political and Social Research [distributor], 2022-03-31. https://doi.org/10.3886/E164142V1
+https://www.openicpsr.org/openicpsr/project/164142/version/V1/view
+
 

@@ -1,19 +1,20 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/2V1dzZDL)
-# Final Project: [Insert Project Title]
+# Final Project: [Sexual Education, Contraceptive Use, & Pregnancy Risk]
 
-Authors: [Your Full Name]  
+Authors: [Amel Attalla & Belen Zemas]  
 Course: PUBH 6199 – Visualizing Data with R  
-Date: [Insert Date]
+Date: [2025-06-26]
 
 ## 🔍 Project Overview
-
-[Write 2–3 sentences about your topic and what your project aims to explore or visualize.]
+Our project aims to look at sexual health education, contraceptive use, and pregnancy risk on a national level.
+We seek to explore through visualizations the relationships between these three main variables 
+and create conversation around access to comprehensive and accurate sexual health education.
 
 ## 📊 Final Write-up
 
 The final write-up, including code and interpretation of the visualizations, is available here:
 
-👉 [**View the write-up website**](https://pubh6199-data-viz-with-r.github.io/hw6-YOUR-TEAM-NAME/)
+👉 [**View the write-up website**](https://pubh6199-data-viz-with-r.github.io/hw6-marge/)
 
 ## 📂 Repository Structure
 
@@ -25,10 +26,6 @@ The final write-up, including code and interpretation of the visualizations, is 
 ├── .Rproj               # RStudio project file
 ├── index.qmd            # Main Quarto file for final write-up
 ├── scratch/             # Scratch files for exploratory analysis         
-├── shiny-app/           # Shiny app folder (if used)
-│   ├── app.R
-|   ├── www/             # Static files for Shiny app (CSS, JS, images)
-│   └── app-data/        # Data files for Shiny app
 ├── docs/                # Rendered site (auto-generated)
 └── README.md            # This file
 ```
@@ -41,27 +38,12 @@ The final write-up, including code and interpretation of the visualizations, is 
 2. Open `index.qmd`.
 3. Click **Render**. The updated html will be saved in the `docs/` folder.
 
-### To run the Shiny app (if applicable):
-
-```r
-shiny::runApp("shiny-app")
-```
-
-> ⚠️ Make sure any necessary data files are in `shiny-app/app-data/`.
-
-## 🔗 Shiny App Link
-
-If your project includes a Shiny app, you can access it here:
-
-👉 [https://yourusername.shinyapps.io/your-app-name](https://yourusername.shinyapps.io/your-app-name)
 
 ## 📦 Packages Used
 
 - `tidyverse`
 - `ggplot2`
 - `quarto`
-- `shiny` (if applicable)
-
-## ✅ To-Do or Known Issues
-
-[Optional section for you to note improvements or bugs.]
+- `dplyr`
+- `ggalluvial`
+- `virdis` 
