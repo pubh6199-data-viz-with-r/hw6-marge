@@ -48,7 +48,7 @@ In this project we aim to examine the relationship between the types of sexual h
 
 ## Data
 
-We sourced our raw data set from the ICPSR website. Some of the key variables we are focusing on after cleaning the raw data are: birth control knowledge, risk of unplanned pregnancy, and types of sexual health education received. Cleaning the data set mainly consisted of narrowing down the variables from 340 to 12 keeping only the variables that we felt were relevant to our project. The steps taken to wrangle and clean the original data set can be seen in it's entirety in the code below.
+We sourced our raw data set from the ICPSR website. Some of the key variables we are focusing on after cleaning the raw data are: contraceptive use, perceived risk of unplanned pregnancy, and types of sexual health education received. Cleaning the data set mainly consisted of narrowing down the variables from 340 to 12 keeping only the variables that we felt were relevant to our project/ the visualizations we wanted to make. The steps taken to wrangle and clean the original data set can be seen in it's entirety in the code below.
 
 ```{r}
 #| eval: false
