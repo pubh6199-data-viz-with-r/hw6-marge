@@ -1,5 +1,5 @@
 ---
-title: "Final Project: [Sexual Education, Contraceptive Use, & Pregnancy Risk]"
+title: "Final Project: Sexual Education, Pregnancy Risk, & Contraceptive Use"
 author: "Amel Attalla & Belen Zemas"
 date: "2025-06-26"
 params:
@@ -176,7 +176,7 @@ clean_fogzone <- raw_data %>%
 
 ## Visualization 1: Sexual Health Education and Risk of Unintended Pregnancy (Grouped Bar Chart)
 
-This plot displays the percentage of participants who perceive themselves to be at risk of unintended pregnancy, grouped by the type of sexual education they received. Across all sex ed types, the majority of participants report being at risk.Those who received no sex ed or don’t know report lower risk perception than those with abstinence-based education, suggesting that the type of education may shape perceived vulnerability. Something interesting to note is that abstinence-only group had the highest risk at 77.3%.
+This plot displays the percentage of participants who perceive themselves to be at risk of unintended pregnancy, grouped by the type of sexual education they received. 
 
 ```{r}
 # your code here
@@ -235,10 +235,10 @@ ggplot(percent_data, aes(x = abstonly, y = pct, fill = riskr)) +
 
 ## Visualization 2: Contraceptive Methods by Type of Sexual Education (Faceted Bar Chart)
 
-This plot displays the contraceptive methods used by participants grouped by their type of sex ed. More comprehensive sex ed (Contraceptive Focused) is associated with greater use of effective methods like condoms or hormonal contraception.No Method and No Sex (Last 12 Mo) appear across all education types, but tend to be more frequent in less comprehensive or absent education categories.
+This plot displays the contraceptive methods used by participants grouped by their type of sex ed.
 
 ```{r}
-# Step 1: Clean and relabel variables
+
 contraceptive_data <- clean_fogzone_factors %>%
   filter(!is.na(Current_most_effective_method)) %>%
   mutate(
@@ -247,7 +247,7 @@ contraceptive_data <- clean_fogzone_factors %>%
       Current_most_effective_method %in% c("withdrawl/NFP", "other/unknown") ~ "Other/Unknown/Withdrawal",
       TRUE ~ Current_most_effective_method
     ),
-    # Capitalize for better display
+
     method_grouped = recode(method_grouped,
       "condoms" = "Condoms",
       "hormonal + condoms" = "Hormonal + Condoms",
@@ -260,7 +260,7 @@ contraceptive_data <- clean_fogzone_factors %>%
     ),
     method_grouped = factor(method_grouped),
     
-    # Add line breaks in abstonly for better facet titles
+
     abstonly = recode(abstonly,
       "No sex ed/ don't know" = "No Sex Ed/\nDon't know",
       "Abstinence Only" = "Abstinence\nOnly",
@@ -269,14 +269,14 @@ contraceptive_data <- clean_fogzone_factors %>%
     )
   )
 
-# Step 2: Create percentage summary
+
 contraceptive_summary <- contraceptive_data %>%
   group_by(abstonly, method_grouped) %>%
   summarise(n = n(), .groups = "drop") %>%
   group_by(abstonly) %>%
   mutate(pct = n / sum(n) * 100)
 
-# Step 3: Plot with vertical bars and improved facet layout
+
 ggplot(contraceptive_summary, aes(x = method_grouped, y = pct, fill = method_grouped)) +
   geom_bar(stat = "identity") +
   scale_fill_viridis_d(
@@ -308,8 +308,7 @@ ggplot(contraceptive_summary, aes(x = method_grouped, y = pct, fill = method_gro
 
 ## Visualization 3: Flow of Sex Ed → Risk Perception → Contraceptive Method
 
-This diagram shows the flow of participants through the type of sex ed they receive, whether they perceive pregnancy risk, and their chosen contraceptive method. Contraceptive-Focused more frequently flows into more effective methods such as condom use, hormonal, or both combined, where abstinence-only flows more into no method. 
-
+This diagram shows the flow of participants through the type of sex ed they receive, whether they perceive pregnancy risk, and their chosen contraceptive method. 
 
 
 ```{r}
@@ -359,25 +358,24 @@ ggplot(sankey_data,
   )
 ```
 
-## OR Shiny app: [Title Here]
-
-_If you choose to create a Shiny app, describe the app's purpose and functionality. Save your code inside the shiny-app/ folder, replace the URL below with your app's URL_
-
-[Click here to open the interactive Shiny app](https://cindyhu.shinyapps.io/two-files-app/)
-
 ## Interpretation
 
-_Summarize your key findings. What do your visualizations reveal?_
+Together, these three visualizations reveal how different types of sexual health education influence participants’ self-perception of pregnancy risk and their contraceptive behavior. 
+
+The first grouped bar chart displays the proportions of self-perceived risk of unplanned pregnancy based on the type of sex education participants received. The abstinence-only group had the highest percentage of scores out of the 4 groups. Similarly, contraceptive-focused and abstinence-focused groups also had high levels of perceived risk (69% and 68.5%, respectively). In contrast, those with no sex education or who didn’t recall their education showed lower perceived risk, with only 63% identifying themselves as at risk. These results suggest that formal sex education—whether abstinence- or contraceptive-focused—may increase awareness of pregnancy risk, whereas lack of education may leave individuals with a reduced or unclear sense of personal risk.
+
+The second faceted bar chart shows the distribution of contraceptive methods used in the past 12 months by participants, grouped by the type of sex education received. Across all education types, “No Method” and “LARC + Condoms” are among the most common categories, with contraceptive-focused and abstinence-focused groups showing slightly higher uptake of effective methods (like hormonal or dual methods). Surprisingly, even among those with contraceptive-focused education, a significant proportion still report no method use, indicating that education alone may not ensure effective behavior change. Those who received no sex education tended to cluster more around non-use or less effective methods, underscoring the importance of both access to information and behavioral support for consistent contraceptive use.
+
+The third Sankey diagram illustrates the pathway from participants’ type of sexual health education, to their self-perceived risk of unintended pregnancy, and finally to their reported contraceptive method use. A clear pattern emerges: individuals who received contraceptive-focused education were more likely to perceive themselves at risk and to use more effective methods, such as hormonal contraception or a combination of LARC and condoms. Conversely, those with no sex education were more likely to perceive no risk and use no method. The diagram highlights how sex education influences both awareness of pregnancy risk and subsequent contraceptive behavior, reinforcing the idea that comprehensive, contraceptive-based education better equips individuals to recognize risk and make informed reproductive health decisions.
 
 ## Limitations
 
-This data is subject to several limitations. First, all observations rely on self-reported information about sexual health knowledge and behaviors, which introduces the potential for recall bias and social desirability bias. Participants may have overestimated their safe sex practices or underreported riskier behaviors. Second, while the dataset includes many helpful variables, it lacks information about where participants received their sexual health education. Knowing the state or region could enable geographic visualizations or an interactive Shiny app to explore the effects of state-specific curricula—an insight that could support policy arguments for more comprehensive sex education in public schools. Finally, the data was collected in 2009 and may not reflect more recent policy changes, cultural shifts, or behavioral trends among young people.
-
+This data is subject to several limitations. First, all observations rely on self-reported information about sexual health knowledge and behaviors, which introduces the potential for recall bias and social desirability bias. Participants may have overestimated their safe sex practices or under-reported riskier behaviors. Second, while the dataset includes many helpful variables, it lacks information about where participants received their sexual health education. Knowing the state or region could enable geographic visualizations or an interactive Shiny app to explore the effects of state-specific curricula—an insight that could support policy arguments for more comprehensive sex education in public schools. Finally, the data was collected in 2009 and may not reflect more recent policy changes, cultural shifts, or behavioral trends among young people.
 
 
 ## Conclusion
 
-_Wrap up your project with a takeaway message or next steps._
+Conclusively, these results suggest that the type of sex ed that participants receive can significantly influence both their self-perceived risk of pregnancy and their contraceptive choices. Comprehensive or contraceptive-focused education appears to foster greater risk awareness and promote the use of more effective contraceptive methods, while lack of education may contribute to lower perceived risk and less protective behavior. As a next step, these insights can inform the development of sex education curricula that not only provide accurate and scientifically up-to-date information, but also actively engage students in understanding personal risk and decision-making. Future research should explore how these patterns differ by age, gender, or cultural context, and evaluate the long-term impact of education type on actual pregnancy outcomes.
 
 ## References
 
